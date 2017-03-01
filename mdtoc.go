@@ -1,7 +1,7 @@
 package mdtoc
 
-import "fmt"
+import "io"
 
-func main() {
-	fmt.Println("vim-go")
+func Generate(input io.Reader, output io.Writer) {
+	io.Copy(output, input)
 }
