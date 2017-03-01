@@ -2,38 +2,49 @@ package mdtoc_test
 
 import (
 	"bytes"
-	"strings"
+	"io/ioutil"
 	"testing"
 
 	"github.com/katcipis/mdtoc"
 )
 
+func assertNoErr(t *testing.T, err error) {
+	if err != nil {
+		t.Fatalf("unexpected err: %s", err)
+	}
+}
+
 func TestTOC(t *testing.T) {
-	type testCase struct {
-		input  string
-		output string
+
+	testCases := []string{
+		"noheaders",
+		"atx/headerfirst",
 	}
 
-	testCases := map[string]testCase{
-		"noHeaders": {
-			input:  "lala\nbaba",
-			output: "lala\nbaba",
-		},
-	}
-
-	for name, testCase := range testCases {
+	for _, name := range testCases {
 		t.Run(name, func(t *testing.T) {
+
+			input, err := ioutil.ReadFile(
+				"testdata/" + name + "/input.md",
+			)
+			assertNoErr(t, err)
+			wantRaw, err := ioutil.ReadFile(
+				"testdata/" + name + "/output.md",
+			)
+			assertNoErr(t, err)
+			want := string(wantRaw)
+
 			var output bytes.Buffer
 			mdtoc.Generate(
-				strings.NewReader(testCase.input),
+				bytes.NewBuffer(input),
 				&output,
 			)
 
 			got := output.String()
-			if testCase.output != got {
+			if want != got {
 				t.Fatalf(
 					"=== expected:\n%s\n=== got: %s\n",
-					testCase.output,
+					want,
 					got,
 				)
 			}
