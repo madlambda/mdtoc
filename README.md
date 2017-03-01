@@ -11,6 +11,9 @@ It is not a comprehensive markdown parser, it does
 not have a lot of cool features, it probably do not
 even covers all markdown syntax use cases.
 
+Right now it only works for [atx](https://daringfireball.net/projects/markdown/syntax#header)
+syntax headers.
+
 ## Install
 
 If you have Go, go-get it:
@@ -29,4 +32,5 @@ Input is read from stdin, results on stdout, Just run:
 cat somemarkdownfile.md | mdtoc > newfile.md
 ```
 
-That is it.
+The result will be a markdown with the TOC on its beggining.
+The TOC is generated based on the parsed headers.
