@@ -43,7 +43,7 @@ func TestTOC(t *testing.T) {
 			got := output.String()
 			if want != got {
 				t.Fatalf(
-					"=== expected:\n%s\n=== got: %s\n",
+					"\nexpected:\n%q\ngot:\n%q\n\n",
 					want,
 					got,
 				)

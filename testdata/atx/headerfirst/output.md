@@ -2,9 +2,8 @@
 # Table of Contents
 
 - [Header](#header)
-
 <!-- mdtocend -->
 
-# Header
+#Header
 
 Here goes nothing
