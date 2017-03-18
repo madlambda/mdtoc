@@ -9,6 +9,7 @@ import (
 )
 
 const headerFormat = "- [%s](#%s)"
+const atxHeader = "#"
 
 func writeHeader(output io.Writer, level int, header string) {
 	// TODO: Handle special characters on header
@@ -20,14 +21,14 @@ func writeHeader(output io.Writer, level int, header string) {
 
 func parseHeader(parsed []string) (int, string) {
 	var level int
-	for parsed[level] == "#" {
+	for parsed[level] == atxHeader {
 		level += 1
 	}
 	return level, strings.Trim(strings.Join(parsed[level:], ""), " ")
 }
 
 func startsWithAtxHeader(line string) bool {
-	return strings.Index(line, "#") == 0
+	return strings.Index(line, atxHeader) == 0
 }
 
 func Generate(input io.Reader, output io.Writer) error {
@@ -47,7 +48,7 @@ func Generate(input io.Reader, output io.Writer) error {
 		if !startsWithAtxHeader(line) {
 			continue
 		}
-		parsed := strings.Split(line, "#")
+		parsed := strings.Split(line, atxHeader)
 		if len(parsed) == 1 {
 			continue
 		}
