@@ -26,6 +26,10 @@ func parseHeader(parsed []string) (int, string) {
 	return level, strings.Trim(strings.Join(parsed[level:], ""), " ")
 }
 
+func startsWithAtxHeader(line string) bool {
+	return strings.Index(line, "#") == 0
+}
+
 func Generate(input io.Reader, output io.Writer) error {
 	headerStart := []byte("<!-- mdtocstart -->")
 	tocHeader := []byte("# Table of Contents")
@@ -40,11 +44,14 @@ func Generate(input io.Reader, output io.Writer) error {
 		if err != nil {
 			return err
 		}
+		if !startsWithAtxHeader(line) {
+			continue
+		}
 		parsed := strings.Split(line, "#")
 		if len(parsed) == 1 {
 			continue
 		}
-		// TODO: HANDLE WHEN # IS ON THE MIDDLE
+		fmt.Sprintf("KMLO: %q", parsed)
 		// TODO: Test when a line has only #
 		if !wroteHeader {
 			output.Write(headerStart)

@@ -19,6 +19,7 @@ func TestTOC(t *testing.T) {
 	testCases := []string{
 		"noheaders",
 		"atx/headerfirst",
+		"atx/invalidheader",
 	}
 
 	for _, name := range testCases {
