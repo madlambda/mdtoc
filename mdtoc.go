@@ -23,7 +23,7 @@ func parseHeader(parsed []string) (int, string) {
 	for parsed[level] == "#" {
 		level += 1
 	}
-	return level, strings.Join(parsed[level:], "")
+	return level, strings.Trim(strings.Join(parsed[level:], ""), " ")
 }
 
 func Generate(input io.Reader, output io.Writer) error {
