@@ -51,7 +51,6 @@ func Generate(input io.Reader, output io.Writer) error {
 		if len(parsed) == 1 {
 			continue
 		}
-		fmt.Sprintf("KMLO: %q", parsed)
 		// TODO: Test when a line has only #
 		if !wroteHeader {
 			output.Write(headerStart)
