@@ -12,13 +12,19 @@ const headerFormat = "- [%s](#%s)"
 const atxHeader = "#"
 const headerIdent = "    "
 
+func normalizeHeader(header string) string {
+	lowerNoHash := strings.TrimLeft(strings.ToLower(header), "#")
+	noSpaces := strings.Replace(lowerNoHash, " ", "-", -1)
+	return noSpaces
+}
+
 func writeHeader(
 	output io.Writer,
 	level int,
 	header string,
 	headersCount map[string]int,
 ) {
-	normalizedHeader := strings.TrimLeft(strings.ToLower(header), "#")
+	normalizedHeader := normalizeHeader(header)
 	count := headersCount[normalizedHeader]
 	headersCount[normalizedHeader] = count + 1
 	if count > 0 {
@@ -37,10 +43,18 @@ func writeHeader(
 	output.Write([]byte(line + "\n"))
 }
 
-func parseHeader(parsed []string) (int, string) {
+func parseHeader(line string) (int, string, bool) {
+	if !startsWithAtxHeader(line) {
+		return 0, "", false
+	}
+	spaceTrimmed := strings.TrimRight(line, " ")
+	parsed := strings.Split(spaceTrimmed, " ")
+	if len(parsed) == 1 {
+		return 0, "", false
+	}
 	headerlevel := len(parsed[0])
 	header := parsed[1:]
-	return headerlevel, strings.Trim(strings.Join(header, ""), " ")
+	return headerlevel, strings.Join(header, " "), true
 }
 
 func startsWithAtxHeader(line string) bool {
@@ -63,16 +77,11 @@ func Generate(input io.Reader, output io.Writer) error {
 		if err != nil {
 			return err
 		}
-		if !startsWithAtxHeader(line) {
-			continue
-		}
 		// markdown atx headers MUST have space after #
-		parsed := strings.Split(line, " ")
-		if len(parsed) == 1 {
-			continue
-		}
-		level, header := parseHeader(parsed)
-		if header == "" {
+		fmt.Printf("KMLO1: %s\n", line)
+		level, header, ok := parseHeader(line)
+		fmt.Printf("KMLO2: %s\n", header)
+		if !ok {
 			continue
 		}
 		if !wroteHeader {
