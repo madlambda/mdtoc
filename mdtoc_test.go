@@ -18,6 +18,8 @@ func TestTOC(t *testing.T) {
 
 	testCases := []string{
 		"noheaders",
+		"empty",
+		"onlyspaces",
 		"atx/headerfirst",
 		"atx/headerlast",
 		"atx/trimrightspace",
