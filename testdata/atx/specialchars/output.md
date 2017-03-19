@@ -1,9 +1,9 @@
 <!-- mdtocstart -->
 # Table of Contents
 
-- [Header](#header)
+- [Header Special Char Cachaça Crap/%100%!@](#header-special-char-cachaça-crap100)
 <!-- mdtocend -->
 
-# Header
+# Header Special Char Cachaça Crap/%100%!@
 
 Here goes nothing

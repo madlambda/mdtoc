@@ -30,6 +30,8 @@ func TestTOC(t *testing.T) {
 		"atx/headerambiguity",
 		"atx/onlyheaderandspaces",
 		"atx/multiplelevels",
+		"atx/specialchars",
+		"atx/withspaces",
 	}
 
 	for _, name := range testCases {
