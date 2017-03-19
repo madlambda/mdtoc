@@ -12,12 +12,23 @@ const headerFormat = "- [%s](#%s)"
 const atxHeader = "#"
 const headerIdent = "    "
 
-func writeHeader(output io.Writer, level int, header string) {
+func writeHeader(
+	output io.Writer,
+	level int,
+	header string,
+	headersCount map[string]int,
+) {
+	normalizedHeader := strings.TrimLeft(strings.ToLower(header), "#")
+	count := headersCount[normalizedHeader]
+	headersCount[normalizedHeader] = count + 1
+	if count > 0 {
+		normalizedHeader = fmt.Sprintf("%s-%d", normalizedHeader, count)
+	}
 	// TODO: Handle special characters on header
 	line := fmt.Sprintf(
 		headerFormat,
 		header,
-		strings.TrimLeft(strings.ToLower(header), "#"),
+		normalizedHeader,
 	)
 	// TODO: Handle output writing errors
 	for i := 1; i < level; i++ {
@@ -41,6 +52,8 @@ func Generate(input io.Reader, output io.Writer) error {
 	tocHeader := []byte("# Table of Contents")
 	headerEnd := []byte("<!-- mdtocend -->")
 	scanner := bufio.NewScanner(input)
+	headersCount := map[string]int{}
+
 	var original bytes.Buffer
 	var wroteHeader bool
 
@@ -69,7 +82,7 @@ func Generate(input io.Reader, output io.Writer) error {
 			output.Write([]byte("\n\n"))
 			wroteHeader = true
 		}
-		writeHeader(output, level, header)
+		writeHeader(output, level, header, headersCount)
 	}
 	// TODO: HANDLE SCAN ERR
 
