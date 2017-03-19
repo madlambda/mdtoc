@@ -10,6 +10,7 @@ import (
 
 const headerFormat = "- [%s](#%s)"
 const atxHeader = "#"
+const headerIdent = "    "
 
 func writeHeader(output io.Writer, level int, header string) {
 	// TODO: Handle special characters on header
@@ -19,7 +20,9 @@ func writeHeader(output io.Writer, level int, header string) {
 		strings.TrimLeft(strings.ToLower(header), "#"),
 	)
 	// TODO: Handle output writing errors
-	// TODO: Handle when header has trailing spaces
+	for i := 1; i < level; i++ {
+		output.Write([]byte(headerIdent))
+	}
 	output.Write([]byte(line + "\n"))
 }
 

@@ -28,6 +28,7 @@ func TestTOC(t *testing.T) {
 		"atx/onlyheader",
 		"atx/headerwithhash",
 		"atx/onlyheaderandspaces",
+		"atx/multiplelevels",
 	}
 
 	for _, name := range testCases {
