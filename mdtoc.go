@@ -6,16 +6,28 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"unicode"
 )
 
 const headerFormat = "- [%s](#%s)"
 const atxHeader = "#"
 const headerIdent = "    "
 
+func isValidHeaderRune(r rune) bool {
+	return unicode.IsNumber(r) || unicode.IsLetter(r) || unicode.IsSpace(r)
+}
+
 func normalizeHeader(header string) string {
 	lowerNoHash := strings.TrimLeft(strings.ToLower(header), "#")
-	noSpaces := strings.Replace(lowerNoHash, " ", "-", -1)
-	return noSpaces
+	noInvalidChars := []rune{}
+
+	for _, r := range lowerNoHash {
+		if isValidHeaderRune(r) {
+			noInvalidChars = append(noInvalidChars, r)
+		}
+	}
+
+	return strings.Replace(string(noInvalidChars), " ", "-", -1)
 }
 
 func writeHeader(
@@ -78,9 +90,7 @@ func Generate(input io.Reader, output io.Writer) error {
 			return err
 		}
 		// markdown atx headers MUST have space after #
-		fmt.Printf("KMLO1: %s\n", line)
 		level, header, ok := parseHeader(line)
-		fmt.Printf("KMLO2: %s\n", header)
 		if !ok {
 			continue
 		}
