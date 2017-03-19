@@ -27,6 +27,7 @@ func TestTOC(t *testing.T) {
 		"atx/invalidheader",
 		"atx/onlyheader",
 		"atx/headerwithhash",
+		"atx/headerambiguity",
 		"atx/onlyheaderandspaces",
 		"atx/multiplelevels",
 	}
