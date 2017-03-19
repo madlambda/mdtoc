@@ -1,7 +1,7 @@
 <!-- mdtocstart -->
 # Table of Contents
 
-- [#Header](#header)
+- [#Header](##header)
 <!-- mdtocend -->
 
 # #Header

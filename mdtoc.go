@@ -20,11 +20,9 @@ func writeHeader(output io.Writer, level int, header string) {
 }
 
 func parseHeader(parsed []string) (int, string) {
-	var level int
-	for parsed[level] == atxHeader {
-		level += 1
-	}
-	return level, strings.Trim(strings.Join(parsed[level:], ""), " ")
+	headerlevel := len(parsed[0])
+	header := parsed[1:]
+	return headerlevel, strings.Trim(strings.Join(header, ""), " ")
 }
 
 func startsWithAtxHeader(line string) bool {
@@ -48,11 +46,15 @@ func Generate(input io.Reader, output io.Writer) error {
 		if !startsWithAtxHeader(line) {
 			continue
 		}
-		parsed := strings.Split(line, atxHeader)
+		// markdown atx headers MUST have space after #
+		parsed := strings.Split(line, " ")
 		if len(parsed) == 1 {
 			continue
 		}
-		// TODO: Test when a line has only #
+		level, header := parseHeader(parsed)
+		if header == "" {
+			continue
+		}
 		if !wroteHeader {
 			output.Write(headerStart)
 			output.Write([]byte("\n"))
@@ -60,9 +62,7 @@ func Generate(input io.Reader, output io.Writer) error {
 			output.Write([]byte("\n\n"))
 			wroteHeader = true
 		}
-		level, header := parseHeader(parsed)
 		writeHeader(output, level, header)
-
 	}
 	// TODO: HANDLE SCAN ERR
 
