@@ -22,6 +22,9 @@ func TestTOC(t *testing.T) {
 		"atx/trimrightspace",
 		"atx/leftspacenotheader",
 		"atx/invalidheader",
+		"atx/onlyheader",
+		"atx/headerwithhash",
+		"atx/onlyheaderandspaces",
 	}
 
 	for _, name := range testCases {
