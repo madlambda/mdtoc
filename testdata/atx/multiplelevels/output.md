@@ -4,6 +4,11 @@
 - [Header1](#header1)
     - [Header2](#header2)
         - [Header3](#header3)
+            - [Header4](#header4)
+                - [Header5](#header5)
+                    - [Header6](#header6)
+- [AnotherHeader1](#anotherheader1)
+
 <!-- mdtocend -->
 
 # Header1
