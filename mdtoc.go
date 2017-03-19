@@ -13,7 +13,11 @@ const atxHeader = "#"
 
 func writeHeader(output io.Writer, level int, header string) {
 	// TODO: Handle special characters on header
-	line := fmt.Sprintf(headerFormat, header, strings.ToLower(header))
+	line := fmt.Sprintf(
+		headerFormat,
+		header,
+		strings.TrimLeft(strings.ToLower(header), "#"),
+	)
 	// TODO: Handle output writing errors
 	// TODO: Handle when header has trailing spaces
 	output.Write([]byte(line + "\n"))
