@@ -1,7 +1,8 @@
 <!-- mdtocstart -->
 # Table of Contents
 
-- [Header](#header)
+- [Header With Spaces](#header-with-spaces)
+- [Header With    More    Spaces](#header-with----more----spaces)
 <!-- mdtocend -->
 
 # Header With Spaces
