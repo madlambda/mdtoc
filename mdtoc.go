@@ -42,7 +42,6 @@ func writeHeader(
 	if count > 0 {
 		normalizedHeader = fmt.Sprintf("%s-%d", normalizedHeader, count)
 	}
-	// TODO: Handle special characters on header
 	line := fmt.Sprintf(
 		headerFormat,
 		header,
@@ -89,7 +88,6 @@ func Generate(input io.Reader, output io.Writer) error {
 		if err != nil {
 			return err
 		}
-		// markdown atx headers MUST have space after #
 		level, header, ok := parseHeader(line)
 		if !ok {
 			continue
