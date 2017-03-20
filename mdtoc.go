@@ -116,7 +116,10 @@ func Generate(input io.Reader, output io.Writer) error {
 }
 
 func GenerateFromFile(inputpath string, output io.Writer) error {
-	file, _ := os.Open(inputpath)
+	file, err := os.Open(inputpath)
 	defer file.Close()
+	if err != nil {
+		return fmt.Errorf("GenerateFromFile: error opening file: %s", err)
+	}
 	return Generate(file, output)
 }

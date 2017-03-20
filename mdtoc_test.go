@@ -48,10 +48,14 @@ func TestTOC(t *testing.T) {
 			want := string(wantRaw)
 
 			var output bytes.Buffer
-			mdtoc.Generate(
+			err = mdtoc.Generate(
 				bytes.NewBuffer(input),
 				&output,
 			)
+
+			if err != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
 
 			got := output.String()
 			if want != got {
@@ -71,10 +75,15 @@ func TestTOC(t *testing.T) {
 			want := string(wantRaw)
 
 			var output bytes.Buffer
-			mdtoc.GenerateFromFile(
+			err = mdtoc.GenerateFromFile(
 				inputfilepath,
 				&output,
 			)
+
+			if err != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
+
 			got := output.String()
 			if want != got {
 				t.Fatalf(
@@ -84,5 +93,16 @@ func TestTOC(t *testing.T) {
 				)
 			}
 		})
+	}
+}
+
+func TestGenerateFromInvalidFile(t *testing.T) {
+	var output bytes.Buffer
+	err := mdtoc.GenerateFromFile(
+		"notvalid.haha.xt",
+		&output,
+	)
+	if err == nil {
+		t.Fatal("expected error, got nil")
 	}
 }
