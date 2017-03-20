@@ -145,9 +145,19 @@ func TestTOC(t *testing.T) {
 func TestGenerateFromInvalidFile(t *testing.T) {
 	var output bytes.Buffer
 	err := mdtoc.GenerateFromFile(
-		"notvalid.haha.xt",
+		"notvalid.haha.xt.777",
 		&output,
 	)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+}
+
+func TestGenerateInPlaceInvalidFile(t *testing.T) {
+	invalidFile := "notvalid.haha.xt.666"
+	defer os.Remove(invalidFile)
+
+	err := mdtoc.GenerateInPlace(invalidFile)
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}

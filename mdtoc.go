@@ -127,7 +127,9 @@ func GenerateFromFile(inputpath string, output io.Writer) error {
 func GenerateInPlace(inputpath string) error {
 	var output bytes.Buffer
 	err := GenerateFromFile(inputpath, &output)
-	// TODO: Handle generateFromFile error
+	if err != nil {
+		return err
+	}
 
 	file, err := os.Create(inputpath)
 	defer file.Close()
