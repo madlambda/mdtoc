@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"os"
 	"strings"
 	"unicode"
 )
@@ -112,4 +113,10 @@ func Generate(input io.Reader, output io.Writer) error {
 	// TODO: HANDLE ERR, WRONG BYTES WRITTEN
 	output.Write(original.Bytes())
 	return nil
+}
+
+func GenerateFromFile(inputpath string, output io.Writer) error {
+	file, _ := os.Open(inputpath)
+	defer file.Close()
+	return Generate(file, output)
 }

@@ -62,5 +62,27 @@ func TestTOC(t *testing.T) {
 				)
 			}
 		})
+		t.Run(name+"/FromFile", func(t *testing.T) {
+			inputfilepath := "testdata/" + name + "/input.md"
+			wantRaw, err := ioutil.ReadFile(
+				"testdata/" + name + "/output.md",
+			)
+			assertNoErr(t, err)
+			want := string(wantRaw)
+
+			var output bytes.Buffer
+			mdtoc.GenerateFromFile(
+				inputfilepath,
+				&output,
+			)
+			got := output.String()
+			if want != got {
+				t.Fatalf(
+					"\nexpected:\n%q\ngot:\n%q\n\n",
+					want,
+					got,
+				)
+			}
+		})
 	}
 }
