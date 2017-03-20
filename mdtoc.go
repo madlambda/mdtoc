@@ -123,3 +123,32 @@ func GenerateFromFile(inputpath string, output io.Writer) error {
 	}
 	return Generate(file, output)
 }
+
+func GenerateInPlace(inputpath string) error {
+	var output bytes.Buffer
+	err := GenerateFromFile(inputpath, &output)
+	// TODO: Handle generateFromFile error
+
+	file, err := os.Create(inputpath)
+	defer file.Close()
+	if err != nil {
+		// TODO: That is why we need a backup file for the original one :-)
+		return fmt.Errorf("GenerateInPlace: unable to truncate file: %s", err)
+	}
+
+	expectedwrite := int64(output.Len())
+	written, err := io.Copy(file, &output)
+	if err != nil {
+		// TODO: That is why we need a backup file for the original one :-)
+		return fmt.Errorf("GenerateInPlace: unable to copy contents: %s", err)
+	}
+	if written != expectedwrite {
+		// TODO: That is why we need a backup file for the original one :-)
+		return fmt.Errorf(
+			"GenerateInPlace: unable to copy contents: wrote %d expected %d",
+			written,
+			expectedwrite,
+		)
+	}
+	return nil
+}

@@ -3,6 +3,7 @@ package mdtoc_test
 import (
 	"bytes"
 	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/katcipis/mdtoc"
@@ -79,12 +80,57 @@ func TestTOC(t *testing.T) {
 				inputfilepath,
 				&output,
 			)
-
-			if err != nil {
-				t.Fatalf("unexpected error: %s", err)
-			}
+			assertNoErr(t, err)
 
 			got := output.String()
+			if want != got {
+				t.Fatalf(
+					"\nexpected:\n%q\ngot:\n%q\n\n",
+					want,
+					got,
+				)
+			}
+		})
+		t.Run(name+"/InPlace", func(t *testing.T) {
+			inputdata, err := ioutil.ReadFile(
+				"testdata/" + name + "/input.md",
+			)
+			assertNoErr(t, err)
+
+			tmpfile, err := ioutil.TempFile("", "mdtoc.inplace.test")
+			assertNoErr(t, err)
+			defer func() {
+				err := os.Remove(tmpfile.Name())
+				assertNoErr(t, err)
+			}()
+
+			n, err := tmpfile.Write(inputdata)
+
+			assertNoErr(t, err)
+			assertNoErr(t, tmpfile.Close())
+
+			if n != len(inputdata) {
+				t.Fatalf(
+					"expected to write %d but wrote %d",
+					n,
+					inputdata,
+				)
+			}
+
+			wantRaw, err := ioutil.ReadFile(
+				"testdata/" + name + "/output.md",
+			)
+
+			assertNoErr(t, err)
+			want := string(wantRaw)
+
+			err = mdtoc.GenerateInPlace(tmpfile.Name())
+			assertNoErr(t, err)
+
+			gotRaw, err := ioutil.ReadFile(tmpfile.Name())
+			assertNoErr(t, err)
+			got := string(gotRaw)
+
 			if want != got {
 				t.Fatalf(
 					"\nexpected:\n%q\ngot:\n%q\n\n",
