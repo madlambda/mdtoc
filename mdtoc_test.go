@@ -11,6 +11,8 @@ import (
 	"github.com/katcipis/mdtoc"
 )
 
+// TODO: TEST UPDATE BEHAVIOUR
+
 func assertNoErr(t *testing.T, err error) {
 	if err != nil {
 		t.Fatalf("unexpected err: %s", err)
