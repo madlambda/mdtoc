@@ -117,7 +117,6 @@ func Generate(input io.Reader, output io.Writer) error {
 	}
 
 	if wroteHeader {
-		// TODO: HANDLE ERR, WRONG BYTES WRITTEN
 		writeOutput(headerEnd)
 		writeOutput([]byte("\n\n"))
 	}
