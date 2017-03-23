@@ -145,6 +145,9 @@ func TestTOC(t *testing.T) {
 }
 
 type fakeReadWriter struct {
+	t                  *testing.T
+	writeCalls         int
+	explodeSecondWrite bool
 }
 
 func (f *fakeReadWriter) Read(b []byte) (int, error) {
@@ -152,6 +155,12 @@ func (f *fakeReadWriter) Read(b []byte) (int, error) {
 }
 
 func (f *fakeReadWriter) Write(p []byte) (n int, err error) {
+	if f.writeCalls > 0 {
+		if f.explodeSecondWrite {
+			f.t.Fatal("should not call write after error")
+		}
+	}
+	f.writeCalls += 1
 	return 0, errors.New("injected error")
 }
 
@@ -169,6 +178,17 @@ func TestInputIoError(t *testing.T) {
 func TestOutputIoError(t *testing.T) {
 	input := strings.NewReader("whatever")
 	err := mdtoc.Generate(input, &fakeReadWriter{})
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+}
+
+func TestStopWritingOnOutputError(t *testing.T) {
+	input := strings.NewReader("# Header")
+	err := mdtoc.Generate(input, &fakeReadWriter{
+		t:                  t,
+		explodeSecondWrite: true,
+	})
 	if err == nil {
 		t.Fatal("expected error, got nil")
 	}
