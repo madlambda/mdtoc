@@ -83,12 +83,9 @@ func Generate(input io.Reader, output io.Writer) error {
 
 	var writeErr error
 	writeOutput := func(b []byte) {
-		fmt.Printf("KMLO: %s\n", writeErr)
 		if writeErr != nil {
-			fmt.Print("KMLO: returning\n")
 			return
 		}
-		fmt.Print("KMLO: passed\n")
 		_, writeErr = output.Write(b)
 	}
 
