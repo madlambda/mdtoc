@@ -2,8 +2,10 @@ package mdtoc_test
 
 import (
 	"bytes"
+	"errors"
 	"io/ioutil"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/katcipis/mdtoc"
@@ -139,6 +141,36 @@ func TestTOC(t *testing.T) {
 				)
 			}
 		})
+	}
+}
+
+type fakeReadWriter struct {
+}
+
+func (f *fakeReadWriter) Read(b []byte) (int, error) {
+	return 0, errors.New("injected error")
+}
+
+func (f *fakeReadWriter) Write(p []byte) (n int, err error) {
+	return 0, errors.New("injected error")
+}
+
+func TestInputIoError(t *testing.T) {
+	var output bytes.Buffer
+	err := mdtoc.Generate(&fakeReadWriter{}, &output)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if output.Len() != 0 {
+		t.Fatalf("should have not written to output, wrote[%d]", output.Len())
+	}
+}
+
+func TestOutputIoError(t *testing.T) {
+	input := strings.NewReader("whatever")
+	err := mdtoc.Generate(input, &fakeReadWriter{})
+	if err == nil {
+		t.Fatal("expected error, got nil")
 	}
 }
 

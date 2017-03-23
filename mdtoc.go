@@ -80,6 +80,11 @@ func Generate(input io.Reader, output io.Writer) error {
 	scanner := bufio.NewScanner(input)
 	headersCount := map[string]int{}
 
+	//var writeErr error
+	//func writeOutput(b []byte) {
+	//output.Write(b)
+	//}
+
 	var original bytes.Buffer
 	var wroteHeader bool
 
@@ -102,7 +107,10 @@ func Generate(input io.Reader, output io.Writer) error {
 		}
 		writeHeader(output, level, header, headersCount)
 	}
-	// TODO: HANDLE SCAN ERR
+
+	if scanner.Err() != nil {
+		return scanner.Err()
+	}
 
 	if wroteHeader {
 		// TODO: HANDLE ERR, WRONG BYTES WRITTEN
@@ -111,8 +119,8 @@ func Generate(input io.Reader, output io.Writer) error {
 	}
 
 	// TODO: HANDLE ERR, WRONG BYTES WRITTEN
-	output.Write(original.Bytes())
-	return nil
+	_, err := output.Write(original.Bytes())
+	return err
 }
 
 func GenerateFromFile(inputpath string, output io.Writer) error {
