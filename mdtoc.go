@@ -31,8 +31,10 @@ func normalizeHeader(header string) string {
 	return strings.Replace(string(noInvalidChars), " ", "-", -1)
 }
 
+type writer func(n []byte)
+
 func writeHeader(
-	output io.Writer,
+	writeOutput writer,
 	level int,
 	header string,
 	headersCount map[string]int,
@@ -48,11 +50,10 @@ func writeHeader(
 		header,
 		normalizedHeader,
 	)
-	// TODO: Handle output writing errors
 	for i := 1; i < level; i++ {
-		output.Write([]byte(headerIdent))
+		writeOutput([]byte(headerIdent))
 	}
-	output.Write([]byte(line + "\n"))
+	writeOutput([]byte(line + "\n"))
 }
 
 func parseHeader(line string) (int, string, bool) {
@@ -80,10 +81,16 @@ func Generate(input io.Reader, output io.Writer) error {
 	scanner := bufio.NewScanner(input)
 	headersCount := map[string]int{}
 
-	//var writeErr error
-	//func writeOutput(b []byte) {
-	//output.Write(b)
-	//}
+	var writeErr error
+	writeOutput := func(b []byte) {
+		fmt.Printf("KMLO: %s\n", writeErr)
+		if writeErr != nil {
+			fmt.Print("KMLO: returning\n")
+			return
+		}
+		fmt.Print("KMLO: passed\n")
+		_, writeErr = output.Write(b)
+	}
 
 	var original bytes.Buffer
 	var wroteHeader bool
@@ -99,13 +106,13 @@ func Generate(input io.Reader, output io.Writer) error {
 			continue
 		}
 		if !wroteHeader {
-			output.Write(headerStart)
-			output.Write([]byte("\n"))
-			output.Write(tocHeader)
-			output.Write([]byte("\n\n"))
+			writeOutput(headerStart)
+			writeOutput([]byte("\n"))
+			writeOutput(tocHeader)
+			writeOutput([]byte("\n\n"))
 			wroteHeader = true
 		}
-		writeHeader(output, level, header, headersCount)
+		writeHeader(writeOutput, level, header, headersCount)
 	}
 
 	if scanner.Err() != nil {
@@ -114,13 +121,12 @@ func Generate(input io.Reader, output io.Writer) error {
 
 	if wroteHeader {
 		// TODO: HANDLE ERR, WRONG BYTES WRITTEN
-		output.Write(headerEnd)
-		output.Write([]byte("\n\n"))
+		writeOutput(headerEnd)
+		writeOutput([]byte("\n\n"))
 	}
 
-	// TODO: HANDLE ERR, WRONG BYTES WRITTEN
-	_, err := output.Write(original.Bytes())
-	return err
+	writeOutput(original.Bytes())
+	return writeErr
 }
 
 func GenerateFromFile(inputpath string, output io.Writer) error {

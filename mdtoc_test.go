@@ -3,6 +3,7 @@ package mdtoc_test
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -155,6 +156,7 @@ func (f *fakeReadWriter) Read(b []byte) (int, error) {
 }
 
 func (f *fakeReadWriter) Write(p []byte) (n int, err error) {
+	fmt.Printf("KMLO: %d\n", f.writeCalls)
 	if f.writeCalls > 0 {
 		if f.explodeSecondWrite {
 			f.t.Fatal("should not call write after error")
