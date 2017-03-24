@@ -23,6 +23,7 @@ func TestTOC(t *testing.T) {
 
 	testCases := []string{
 		"noheaders",
+		"removeheaders",
 		"empty",
 		"onlyspaces",
 		"atx/headerfirst",
@@ -37,6 +38,7 @@ func TestTOC(t *testing.T) {
 		"atx/multiplelevels",
 		"atx/specialchars",
 		"atx/withspaces",
+		"atx/updateheader",
 	}
 
 	for _, name := range testCases {
