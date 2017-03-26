@@ -1,12 +1,3 @@
-<!-- mdtocstart -->
-# Table of Contents
-
-- [mdtoc](#mdtoc)
-    - [Why ?](#why-)
-    - [Install](#install)
-    - [Usage](#usage)
-<!-- mdtocend -->
-
 # mdtoc
 
 A Table of contents generator for markdown.
