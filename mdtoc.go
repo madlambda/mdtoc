@@ -74,10 +74,19 @@ func startsWithAtxHeader(line string) bool {
 	return strings.Index(line, atxHeader) == 0
 }
 
+func skipUntil(scanner *bufio.Scanner, stop func(string) bool) {
+	for scanner.Scan() {
+		if stop(scanner.Text()) {
+			return
+		}
+	}
+	// TODO: Error handling :-)
+}
+
 func Generate(input io.Reader, output io.Writer) error {
-	headerStart := []byte("<!-- mdtocstart -->")
-	tocHeader := []byte("# Table of Contents")
-	headerEnd := []byte("<!-- mdtocend -->")
+	headerStart := "<!-- mdtocstart -->"
+	tocHeader := "# Table of Contents"
+	headerEnd := "<!-- mdtocend -->"
 	scanner := bufio.NewScanner(input)
 	headersCount := map[string]int{}
 
@@ -94,6 +103,14 @@ func Generate(input io.Reader, output io.Writer) error {
 
 	for scanner.Scan() {
 		line := scanner.Text()
+		if line == headerStart {
+			skipUntil(scanner, func(l string) bool { return l == headerEnd })
+			skipUntil(scanner, func(l string) bool {
+				fmt.Printf("KMLO: %q\n", l)
+				return l != ""
+			})
+			line = scanner.Text()
+		}
 		_, err := original.Write([]byte(line + "\n"))
 		if err != nil {
 			return err
@@ -103,9 +120,9 @@ func Generate(input io.Reader, output io.Writer) error {
 			continue
 		}
 		if !wroteHeader {
-			writeOutput(headerStart)
+			writeOutput([]byte(headerStart))
 			writeOutput([]byte("\n"))
-			writeOutput(tocHeader)
+			writeOutput([]byte(tocHeader))
 			writeOutput([]byte("\n\n"))
 			wroteHeader = true
 		}
@@ -117,7 +134,7 @@ func Generate(input io.Reader, output io.Writer) error {
 	}
 
 	if wroteHeader {
-		writeOutput(headerEnd)
+		writeOutput([]byte(headerEnd))
 		writeOutput([]byte("\n\n"))
 	}
 
