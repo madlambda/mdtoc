@@ -11,8 +11,6 @@ import (
 	"github.com/katcipis/mdtoc"
 )
 
-// TODO: TEST UPDATE BEHAVIOUR
-
 func assertNoErr(t *testing.T, err error) {
 	if err != nil {
 		t.Fatalf("unexpected err: %s", err)
@@ -26,6 +24,7 @@ func TestTOC(t *testing.T) {
 		"removeheaders",
 		"empty",
 		"onlyspaces",
+		"trimheaders",
 		"atx/headerfirst",
 		"atx/headerlast",
 		"atx/trimrightspace",
@@ -181,10 +180,10 @@ func TestInputIoError(t *testing.T) {
 
 func TestOnCorruptedHeaderFails(t *testing.T) {
 	const corruptedheader = `
-<!-- mdtocstart -->
-# Table of Contents
-- [Header](#header)
-# Header
+		<!-- mdtocstart -->
+		# Table of Contents
+		- [Header](#header)
+		# Header
 	`
 	input := strings.NewReader(corruptedheader)
 	var output bytes.Buffer

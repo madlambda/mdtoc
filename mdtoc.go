@@ -104,8 +104,10 @@ func Generate(input io.Reader, output io.Writer) error {
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		if line == headerStart {
-			err := skipUntil(scanner, func(l string) bool { return l == headerEnd })
+		if strings.TrimSpace(line) == headerStart {
+			err := skipUntil(scanner, func(l string) bool {
+				return strings.TrimSpace(l) == headerEnd
+			})
 			if err != nil {
 				return fmt.Errorf("error removing headers(corrupted headers?): %s", err)
 			}
