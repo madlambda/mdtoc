@@ -179,6 +179,24 @@ func TestInputIoError(t *testing.T) {
 	}
 }
 
+func TestOnCorruptedHeaderFails(t *testing.T) {
+	const corruptedheader = `
+<!-- mdtocstart -->
+# Table of Contents
+- [Header](#header)
+# Header
+	`
+	input := strings.NewReader(corruptedheader)
+	var output bytes.Buffer
+	err := mdtoc.Generate(input, &output)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if output.Len() != 0 {
+		t.Fatalf("expected empty output, got: %q", output)
+	}
+}
+
 func TestOutputIoError(t *testing.T) {
 	input := strings.NewReader("whatever")
 	err := mdtoc.Generate(input, &fakeReadWriter{})

@@ -3,6 +3,7 @@ package mdtoc
 import (
 	"bufio"
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -74,13 +75,13 @@ func startsWithAtxHeader(line string) bool {
 	return strings.Index(line, atxHeader) == 0
 }
 
-func skipUntil(scanner *bufio.Scanner, stop func(string) bool) {
+func skipUntil(scanner *bufio.Scanner, stop func(string) bool) error {
 	for scanner.Scan() {
 		if stop(scanner.Text()) {
-			return
+			return nil
 		}
 	}
-	// TODO: Error handling :-)
+	return errors.New("skipped all content")
 }
 
 func Generate(input io.Reader, output io.Writer) error {
@@ -104,11 +105,11 @@ func Generate(input io.Reader, output io.Writer) error {
 	for scanner.Scan() {
 		line := scanner.Text()
 		if line == headerStart {
-			skipUntil(scanner, func(l string) bool { return l == headerEnd })
-			skipUntil(scanner, func(l string) bool {
-				fmt.Printf("KMLO: %q\n", l)
-				return l != ""
-			})
+			err := skipUntil(scanner, func(l string) bool { return l == headerEnd })
+			if err != nil {
+				return fmt.Errorf("error removing headers(corrupted headers?): %s", err)
+			}
+			skipUntil(scanner, func(l string) bool { return l != "" })
 			line = scanner.Text()
 		}
 		_, err := original.Write([]byte(line + "\n"))
