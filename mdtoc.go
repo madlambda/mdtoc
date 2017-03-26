@@ -32,7 +32,7 @@ func normalizeHeader(header string) string {
 	return strings.Replace(string(noInvalidChars), " ", "-", -1)
 }
 
-type writer func(n []byte)
+type writer func(data string)
 
 func writeHeader(
 	writeOutput writer,
@@ -52,9 +52,9 @@ func writeHeader(
 		normalizedHeader,
 	)
 	for i := 1; i < level; i++ {
-		writeOutput([]byte(headerIdent))
+		writeOutput(headerIdent)
 	}
-	writeOutput([]byte(line + "\n"))
+	writeOutput(line + "\n")
 }
 
 func parseHeader(line string) (int, string, bool) {
@@ -92,11 +92,11 @@ func Generate(input io.Reader, output io.Writer) error {
 	headersCount := map[string]int{}
 
 	var writeErr error
-	writeOutput := func(b []byte) {
+	writeOutput := func(s string) {
 		if writeErr != nil {
 			return
 		}
-		_, writeErr = output.Write(b)
+		_, writeErr = output.Write([]byte(s))
 	}
 
 	var original bytes.Buffer
@@ -129,10 +129,10 @@ func Generate(input io.Reader, output io.Writer) error {
 			continue
 		}
 		if !wroteHeader {
-			writeOutput([]byte(headerStart))
-			writeOutput([]byte("\n"))
-			writeOutput([]byte(tocHeader))
-			writeOutput([]byte("\n\n"))
+			writeOutput(headerStart)
+			writeOutput("\n")
+			writeOutput(tocHeader)
+			writeOutput("\n\n")
 			wroteHeader = true
 		}
 		writeHeader(writeOutput, level, header, headersCount)
@@ -143,11 +143,11 @@ func Generate(input io.Reader, output io.Writer) error {
 	}
 
 	if wroteHeader {
-		writeOutput([]byte(headerEnd))
-		writeOutput([]byte("\n\n"))
+		writeOutput(headerEnd)
+		writeOutput("\n\n")
 	}
 
-	writeOutput(original.Bytes())
+	writeOutput(original.String())
 	return writeErr
 }
 
