@@ -100,6 +100,7 @@ func Generate(input io.Reader, output io.Writer) error {
 	}
 
 	var original bytes.Buffer
+	var isCodeSection bool
 	var wroteHeader bool
 
 	for scanner.Scan() {
@@ -118,8 +119,13 @@ func Generate(input io.Reader, output io.Writer) error {
 		if err != nil {
 			return err
 		}
+
+		if strings.HasPrefix(line, "```") {
+			isCodeSection = !isCodeSection
+		}
+
 		level, header, ok := parseHeader(line)
-		if !ok {
+		if !ok || isCodeSection {
 			continue
 		}
 		if !wroteHeader {
