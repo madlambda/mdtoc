@@ -157,10 +157,10 @@ func Generate(input io.Reader, output io.Writer) error {
 
 func GenerateFromFile(inputpath string, output io.Writer) error {
 	file, err := os.Open(inputpath)
-	defer file.Close()
 	if err != nil {
 		return fmt.Errorf("GenerateFromFile: error opening file: %s", err)
 	}
+	defer file.Close()
 	return Generate(file, output)
 }
 
@@ -172,11 +172,11 @@ func GenerateInPlace(inputpath string) error {
 	}
 
 	file, err := os.Create(inputpath)
-	defer file.Close()
 	if err != nil {
 		// TODO: That is why we need a backup file for the original one :-)
 		return fmt.Errorf("GenerateInPlace: unable to truncate file: %s", err)
 	}
+	defer file.Close()
 
 	expectedwrite := int64(output.Len())
 	written, err := io.Copy(file, &output)
