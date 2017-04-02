@@ -112,7 +112,11 @@ func Generate(input io.Reader, output io.Writer) error {
 			if err != nil {
 				return fmt.Errorf("error removing headers(corrupted headers?): %s", err)
 			}
-			skipUntil(scanner, func(l string) bool { return l != "" })
+			err = skipUntil(scanner, func(l string) bool { return l != "" })
+			if err != nil {
+				// Just header present, removed headers
+				return nil
+			}
 			line = scanner.Text()
 		}
 		_, err := original.Write([]byte(line + "\n"))

@@ -25,6 +25,7 @@ func TestTOC(t *testing.T) {
 		"empty",
 		"onlyspaces",
 		"trimheaders",
+		"toconly",
 		"atx/ignorecode",
 		"atx/headerfirst",
 		"atx/headerlast",
