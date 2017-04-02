@@ -32,5 +32,17 @@ Input is read from stdin, results on stdout, Just run:
 cat somemarkdownfile.md | mdtoc > newfile.md
 ```
 
-The result will be a markdown with the TOC on its beggining.
+The result will be a markdown with the TOC on its beginning.
 The TOC is generated based on the parsed headers.
+
+You can also pass a file:
+
+```sh
+mdtoc somemarkdownfile.md > newfile.md
+```
+
+Or make the change in place:
+
+```sh
+mdtoc -w somemarkdownfile.md
+```

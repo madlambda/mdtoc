@@ -3,7 +3,3 @@
 
 - [Header](#header)
 <!-- mdtocend -->
-
-# Header
-
-Here goes nothing
