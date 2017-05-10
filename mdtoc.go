@@ -134,7 +134,7 @@ func Generate(input io.Reader, output io.Writer) error {
 		}
 		if !wroteHeader {
 			writeOutput(headerStart)
-			writeOutput("\n")
+			writeOutput("\n\n")
 			writeOutput(tocHeader)
 			writeOutput("\n\n")
 			wroteHeader = true
@@ -147,6 +147,7 @@ func Generate(input io.Reader, output io.Writer) error {
 	}
 
 	if wroteHeader {
+		writeOutput("\n")
 		writeOutput(headerEnd)
 		writeOutput("\n\n")
 	}
