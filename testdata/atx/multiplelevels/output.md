@@ -1,4 +1,5 @@
 <!-- mdtocstart -->
+
 # Table of Contents
 
 - [Header1](#header1)
@@ -8,6 +9,7 @@
                 - [Header5](#header5)
                     - [Header6](#header6)
 - [AnotherHeader1](#anotherheader1)
+
 <!-- mdtocend -->
 
 # Header1
