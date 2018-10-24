@@ -16,11 +16,11 @@ syntax headers.
 
 ## Install
 
-If you have Go, go-get it:
+If you have Go, go get it:
 
 ```sh
 # Make sure GOPATH/bin is in your PATH
-go get github.com/katcipis/mdtoc/cmd/mdtoc
+go get github.com/madlambda/mdtoc/cmd/mdtoc
 ```
 If not, install Go :-).
 
