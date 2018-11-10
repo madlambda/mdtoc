@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/katcipis/mdtoc"
+	"github.com/madlambda/mdtoc"
 )
 
 func main() {
