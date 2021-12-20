@@ -1,4 +1,4 @@
-name: Test and Benchmarks
+name: run tests
 
 on:
   push:
@@ -18,13 +18,13 @@ jobs:
         go: ["1.14", "1.15", "1.16", "1.17"]
 
     steps:
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@v2
 
-      - name: Setup Go ${{matrix.go}}
+      - name: setup Go ${{matrix.go}}
         uses: actions/setup-go@v2
         with:
           go-version: ${{matrix.go}}
 
-      - name: tests
+      - name: running tests
         run: make test
