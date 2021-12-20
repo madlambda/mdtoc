@@ -16,12 +16,12 @@ syntax headers.
 
 ## Install
 
-If you have Go, go get it:
+If you have Go just run:
 
 ```sh
-# Make sure GOPATH/bin is in your PATH
-go get github.com/madlambda/mdtoc/cmd/mdtoc
+go install github.com/madlambda/mdtoc/cmd/mdtoc@latest
 ```
+
 If not, install Go :-).
 
 ## Usage
