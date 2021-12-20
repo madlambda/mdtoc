@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    name: Run test and benchmarks
+    name: run tests
     strategy:
       matrix:
         os: [macos-10.15, ubuntu-20.04] # , windows-2019] TODO(katcipis): broken on windows for now x_x
