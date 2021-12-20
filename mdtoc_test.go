@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/katcipis/mdtoc"
+	"github.com/madlambda/mdtoc"
 )
 
 func assertNoErr(t *testing.T, err error) {

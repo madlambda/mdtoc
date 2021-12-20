@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/madlambda/mdtoc"
@@ -9,11 +10,11 @@ import (
 
 func main() {
 	if len(os.Args) == 1 {
-		mdtoc.Generate(os.Stdin, os.Stdout)
+		exiterr(mdtoc.Generate(os.Stdin, os.Stdout))
 		return
 	}
 	if len(os.Args) == 2 {
-		mdtoc.GenerateFromFile(os.Args[1], os.Stdout)
+		exiterr(mdtoc.GenerateFromFile(os.Args[1], os.Stdout))
 		return
 	}
 
@@ -22,5 +23,11 @@ func main() {
 		return
 	}
 
-	mdtoc.GenerateInPlace(os.Args[2])
+	exiterr(mdtoc.GenerateInPlace(os.Args[2]))
+}
+
+func exiterr(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }

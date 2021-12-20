@@ -1,5 +1,10 @@
 # mdtoc
 
+[![GoDoc](https://godoc.org/github.com/madlambda/mdtoc?status.svg)](https://godoc.org/github.com/madlambda/mdtoc)
+![Static Analysis Status](https://github.com/madlambda/mdtoc/actions/workflows/lint.yml/badge.svg)
+![Test Status](https://github.com/madlambda/mdtoc/actions/workflows/test.yml/badge.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/madlambda/mdtoc)](https://goreportcard.com/report/github.com/madlambda/mdtoc)
+
 A Table of contents generator for markdown.
 
 ## Why ?
