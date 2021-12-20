@@ -1,3 +1,3 @@
 module github.com/madlambda/mdtoc
 
-go 1.17
+go 1.14
